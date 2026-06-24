@@ -19,48 +19,71 @@
 
 
 <style>
+
+#app{
+        display:flex;
+        background:cyan;
+}
+
+#rightside{
+        display:flex;
+        flex-direction: column;
+        flex-grow:1;
+        background:magenta;
+}
+
+#children-moves{
+        flex-direction: column;
+        flex-grow:1;
+        display:flex;
+
+}
+
+#games{
+        flex-direction: column;
+        flex-grow:1;
+        display:flex;
+}
+
 a[active]{
         color:black;
 }
+
 a[active="true"]{
         color:red;
 }
+
 </style>
-
-
-
 
 <body>
 <div id="app">
-  <div id="board"></div>
-</div>
 
-<div id="myBoard" style="width: 400px"></div>
+        <div id="leftside">
+        <div id="myBoard" style="width: 400px"></div>
+        <label>Status:</label>
+        <div id="gameStatus"></div>
 
-<label>Status:</label>
-<div id="gameStatus"></div>
-<label>FEN:</label>
-<div id="gameFEN"></div>
-<label>PGN:</label>
-<div id="gamePGN"></div>
-<div id="movesEl"></div>
+        <label>FEN:</label>
+        <div id="gameFEN"></div>
 
-<button id="previous">Previous</button>
-<button id="next">Next</button>
+        <label>PGN:</label>
+        <div id="movesEl"></div>
 
-<div id="sidebar">
+        <button id="previous">Previous</button>
+        <button id="next">Next</button>
+        </div>
 
-  <div id="opening-name"></div>
-
-  <div id="move-list"></div>
-
-  <div id="children-moves"></div>
-
+        <div id="rightside">
+          <div id="children-moves">
+          </div>
+          <div id="games">
+          </div>
+        </div>
 </div>
 
 <script type="module" src="/src/main.js">
 </script>
 
-</body>
 
+</body>
 </html>
