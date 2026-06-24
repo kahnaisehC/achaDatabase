@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- add stylesheet via CDN: -->
+<link rel="stylesheet"
+      href="https://unpkg.com/@chrisoakman/chessboard2@0.5.0/dist/chessboard2.min.css"
+      integrity="sha384-47VeTDpmy4yT21gKPXQcLQYQZwlmz27gEH5NTrOmTk3G/SGvMyltclOW/Q8uE+sL"
+      crossorigin="anonymous">
+
+<!-- add JS via CDN: -->
+<script src="https://unpkg.com/@chrisoakman/chessboard2@0.5.0/dist/chessboard2.min.js"
+        integrity="sha384-/KwQCjA1GWovZNV3QDVtvSMDzO4reGgarF/RqHipr7hIUElH3r5zNl9WEPPOBRIF"
+        crossorigin="anonymous"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js" 
+        integrity="sha512-xRllwz2gdZciIB+AkEbeq+gVhX8VB8XsfqeFbUh+SzHlN96dEduwtTuVuc2u9EROlmW9+yhRlxjif66ORpsgVA==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer"></script>
+
+</head>
+
+
+<body>
+<div id="app">
+  <div id="board"></div>
+</div>
+
+<div id="myBoard" style="width: 400px"></div>
+
+<label>Status:</label>
+<div id="gameStatus"></div>
+<label>FEN:</label>
+<div id="gameFEN"></div>
+<label>PGN:</label>
+<div id="gamePGN"></div>
+<div id="movesEl"></div>
+
+<button id="previous">Previous</button>
+<button id="next">Next</button>
+
+<div id="sidebar">
+
+  <div id="opening-name"></div>
+
+  <div id="move-list"></div>
+
+  <div id="children-moves"></div>
+
+</div>
+
+
+
+<script type="module" src="/src/main.js">
+</script>
+
+</body>
+
+</html>

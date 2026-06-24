@@ -1,0 +1,107 @@
+
+Collection: persona
+[
+	{
+		_id: ObjectId(),
+		nombre: string,
+		apellido: string,
+		DNI: string,
+		fecha_nacimiento: DATE,
+		nacionalidad: string,
+		provincia: string,
+		celular: string,
+		id_fide: string,
+		pago_canon: bool
+
+
+		// tabla arbitro
+		id_titulo_arbitro: string
+
+		//tabla socio
+		numero_socio: INT,
+		cuota_al_dia: ????,
+
+		// tabla alias lichess
+		aliases: []string
+
+	}
+]
+
+Collection: Evento
+[	
+	{
+		_id ObjectId(),
+		nombre string,
+		descripcion string,
+		fecha_hora DATE,
+		cupo number,
+		participantes []ObjectId(persona),
+		encargados []ObjectId(persona)
+	}
+	
+]
+
+Collection: Circuito
+[	
+	{
+		_id ObjectId(),
+		nombre string,
+		descripcion string,
+		criterio_clasificacion string,
+		torneos []ObjectId(torneo)
+
+	}
+]
+
+Collection: Torneo
+[
+	{
+		_id ObjectId(),
+		nombre string,
+		lugar string,
+		control_tiempo string,
+		cupo number,
+		fide_event_id string,
+		url_formulario string,
+		partidas []ObjectId(partida),	
+		arbitros []Document{
+			id_persona ObjectId(persona),
+			rol string,
+		},
+		organizadores []Document{
+			id_persona ObjectId(persona),
+			rol string,
+		},
+		participantes []Document{
+			ObjectId(persona),
+			posicion number,
+			username string,
+		}
+	}
+]
+
+Collection: Partida
+[
+	{
+		_id ObjectId(),
+		nombre_torneo string,
+		id_blancas ObjectId(persona),
+		id_negras ObjectId(persona),
+		resultado Enum,
+		pgn PGN,
+		foto_planilla string,
+		fecha Date,
+	}
+]
+
+Coleccion: Inscripcion
+[
+	{
+		_id ObjectId(),
+		id_persona ObjectId(persona),
+		id_torneo ObjectId(torneo),
+		fecha_hora DATE,
+		paga_multa bool,
+		datos_adicionales Document
+	}
+]
