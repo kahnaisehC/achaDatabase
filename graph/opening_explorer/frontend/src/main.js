@@ -2,7 +2,6 @@
 // https://github.com/jhlywa/chess.js
 // import Chess from "chess.js"
 // import Chessboard2 from "chessboard2.js"
-//
 
 const game = new Chess()
 
@@ -133,9 +132,14 @@ function renderMoveArray(moves, movesEl){
     let moveEl = document.createElement("a")
     if(move.color === "w"){
       moveEl.innerText = "" + (i/2+1) + ". "
-
     }
     moveEl.innerText += move.san + " "
+    moveEl.setAttribute("data-fen", move.fen)
+    moveEl.setAttribute("active", false)
+    if(i === state.moveIndex-1){
+      moveEl.setAttribute("active", true)
+    }
+
     movesEl.append(moveEl)
   }
 }
