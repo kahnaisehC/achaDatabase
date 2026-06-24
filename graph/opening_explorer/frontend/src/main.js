@@ -16,6 +16,7 @@ const board = Chessboard2('myBoard', boardConfig)
 const statusEl = document.getElementById('gameStatus')
 const fenEl = document.getElementById('gameFEN')
 const movesEl = document.getElementById('movesEl')
+const childrenMovesEl = document.getElementById("childrenMoves")
 
 const moves = []
 let moveIndex = 0;
@@ -28,9 +29,61 @@ const state = {
   movesEl,
   moves,
   moveIndex,
+  childrenMovesEl,
 }
 
 updateStatus()
+
+function getMoves(fen){
+  let moves = state.game.moves({verbose: true})
+  for(let i = 0; i < moves.length; i++){
+    moves[i].whitePercent = 40;
+    moves[i].blackPercent = 40;
+    moves[i].drawPercent = 20;
+    moves[i].amountGames = 100;
+  }
+  return moves
+}
+
+function renderChildrenMoves(fen, childrenMovesEl){
+  childrenMovesEl.replaceChildren()
+  let moves = getMoves(fen)
+  for(let i = 0; i < moves.length; i++){
+    let move = moves[i]
+    let moveEl = document.createElement("p")
+    moveEl.innerText = 
+      move.san + " " + 
+      move.amountGames + " " +
+      move.blackPercent + " " + 
+      move.drawPercent + " " +
+      move.whitePercent
+
+    moveEl.addEventListener("click", (e)=>{
+      console.log("imclicking")
+      game.move(move)
+      if(state.moves.length === state.moveIndex){
+        state.moves.push(move)
+        state.moveIndex++
+      }else if(state.moves[state.moveIndex].from === move.from && state.moves[state.moveIndex].to === move.to){
+        state.moveIndex++
+      }else{
+        state.moves.splice(state.moveIndex, Infinity, move)
+        state.moveIndex++
+      }
+      board.fen(game.fen(), () => {
+        updateStatus()
+      })
+      })
+
+    childrenMovesEl.append(moveEl)
+  }
+}
+
+function getGames(fen){
+  return {
+
+  }
+}
 
 function onDragStart (dragStartEvt) {
   // do not pick up pieces if the game is over
@@ -69,7 +122,6 @@ function onDrop (dropEvt) {
   if (move) {
     // update the board position with the new game position, then update status DOM elements
     board.fen(game.fen(), () => {
-      move.fen = game.fen()
       updateStatus()
     })
     if(moves.length === state.moveIndex){
@@ -120,6 +172,7 @@ function updateStatus () {
   statusEl.innerHTML = statusHTML
   fenEl.innerHTML = game.fen()
 
+  renderChildrenMoves(game.fen(), state.childrenMovesEl)
   renderMoveArray(state.moves, movesEl)
 }
 
@@ -132,7 +185,7 @@ function renderMoveArray(moves, movesEl){
       moveEl.innerText = "" + (i/2+1) + ". "
     }
     moveEl.innerText += move.san + " "
-    moveEl.setAttribute("data-fen", move.fen)
+    moveEl.setAttribute("data-fen", move.after)
     moveEl.setAttribute("data-index", i)
     moveEl.setAttribute("active", false)
     if(i === state.moveIndex-1){
