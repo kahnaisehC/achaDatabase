@@ -72,7 +72,6 @@ function onDrop (dropEvt) {
       move.fen = game.fen()
       updateStatus()
     })
-    console.log(move)
     if(moves.length === state.moveIndex){
       moves.push(move)
       state.moveIndex++
@@ -125,7 +124,6 @@ function updateStatus () {
 }
 
 function renderMoveArray(moves, movesEl){
-  console.log("??")
   movesEl.replaceChildren()
   for(let i = 0; i < moves.length; i++){
     let move = moves[i]
@@ -135,9 +133,28 @@ function renderMoveArray(moves, movesEl){
     }
     moveEl.innerText += move.san + " "
     moveEl.setAttribute("data-fen", move.fen)
+    moveEl.setAttribute("data-index", i)
     moveEl.setAttribute("active", false)
     if(i === state.moveIndex-1){
       moveEl.setAttribute("active", true)
+    }else{
+      moveEl.addEventListener("click", (e)=>{
+        let moveIdx = i
+        if(moveIdx < state.moveIndex-1){
+          while(state.moveIndex-1 !== moveIdx){
+            game.undo();
+            state.moveIndex--;
+          }
+        }else{
+          while(state.moveIndex <= moveIdx){
+            game.move(state.moves[state.moveIndex])
+            state.moveIndex++
+          }
+        }
+        board.fen(game.fen(), () => {
+          updateStatus()
+        })
+      })
     }
 
     movesEl.append(moveEl)
