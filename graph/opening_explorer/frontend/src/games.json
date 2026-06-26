@@ -1,0 +1,119 @@
+[
+  {
+    "id": "TJxUmbWK",
+    "rated": true,
+    "variant": "standard",
+    "speed": "rapid",
+    "perf": "rapid",
+    "createdAt": 1504125627542,
+    "lastMoveAt": 1504126012148,
+    "status": "resign",
+    "source": "arena",
+    "players": {
+      "white": {
+        "user": {
+          "name": "arex",
+          "patron": true,
+          "patronColor": 10,
+          "id": "arex"
+        },
+        "rating": 1627,
+        "ratingDiff": 15
+      },
+      "black": {
+        "user": {
+          "name": "JERC-12Jesus",
+          "id": "jerc-12jesus"
+        },
+        "rating": 1740,
+        "ratingDiff": -15
+      }
+    },
+    "winner": "white",
+    "moves": "e4 d6 d4 Nf6 Nc3 g6 Bd3 Bg7 Be3 O-O Qd2 Ng4 O-O-O Nxe3 Qxe3 Nd7 f4 Nf6 h3 c6 g4 Qb6 Nf3 c5 dxc5 Qxc5 Qxc5 dxc5 e5 Nd7 Nd5 e6 Ne7+ Kh8 Bb5 a6 Bxd7 Bxd7 Rxd7 Rfe8 Rxb7",
+    "tournament": "Xg7M4och",
+    "clock": {
+      "initial": 600,
+      "increment": 0,
+      "totalTime": 600
+    }
+  },
+  {
+    "id": "4OtIh2oh",
+    "rated": true,
+    "variant": "standard",
+    "speed": "rapid",
+    "perf": "rapid",
+    "createdAt": 1504124463365,
+    "lastMoveAt": 1504125594866,
+    "status": "outoftime",
+    "source": "arena",
+    "players": {
+      "white": {
+        "user": {
+          "name": "wowk",
+          "id": "wowk"
+        },
+        "rating": 1662,
+        "ratingDiff": 10
+      },
+      "black": {
+        "user": {
+          "name": "arex",
+          "patron": true,
+          "patronColor": 10,
+          "id": "arex"
+        },
+        "rating": 1638,
+        "ratingDiff": -11
+      }
+    },
+    "winner": "white",
+    "moves": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 Bxd5 cxd5 Qe2 Bd6 Rh5 g6 Rxd5 Bxh2+ Kxh2 Qxd5 d4 Bb7 f3 Rae8 Qf2 Qh5+ Kg1 Re7 Bf4 Rfe8 Nd2 Re2 Qg3 h6 Rf1 g5 Ne4 Bxe4 fxe4 R2xe4 Be5 Qe2 Rf6 Re6 Rxe6 fxe6 Bf6 Qd1+ Kf2 Re2+ Kf3 Qf1+ Kg4 Qf5+ Kh5 Qxf6 Qb8+",
+    "tournament": "Xg7M4och",
+    "clock": {
+      "initial": 600,
+      "increment": 0,
+      "totalTime": 600
+    }
+  },
+  {
+    "id": "ILwozzRZ",
+    "rated": true,
+    "variant": "standard",
+    "speed": "rapid",
+    "perf": "rapid",
+    "createdAt": 1504123542210,
+    "lastMoveAt": 1504124423935,
+    "status": "resign",
+    "source": "arena",
+    "players": {
+      "white": {
+        "user": {
+          "name": "Roven1976",
+          "id": "roven1976"
+        },
+        "rating": 1615,
+        "ratingDiff": -10
+      },
+      "black": {
+        "user": {
+          "name": "arex",
+          "patron": true,
+          "patronColor": 10,
+          "id": "arex"
+        },
+        "rating": 1627,
+        "ratingDiff": 11
+      }
+    },
+    "winner": "black",
+    "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 d6 Be3 Be7 Nc3 O-O O-O Na5 Bb5 c6 b4 cxb5 bxa5 Qxa5 Ne2 h6 d4 b4 dxe5 dxe5 Nxe5 Qxe5 Qd3 Be6 Bd4 Qxe4 Bxf6 Qxd3 cxd3 Bxf6 Rab1 a5 a3 b3 d4 Rfd8 Rfd1 a4 Nf4 Rxd4 Nxe6 fxe6 Re1 Kf7 Rbc1 Rd7 f4 Bb2 Rb1 Bxa3 Re5 Rd5 Re4 b5 g4 Bc5+ Kh1 a3 Rxb3 a2 Re1 a1=Q Rxa1 Rxa1+ Kg2",
+    "tournament": "Xg7M4och",
+    "clock": {
+      "initial": 600,
+      "increment": 0,
+      "totalTime": 600
+    }
+  }
+]
