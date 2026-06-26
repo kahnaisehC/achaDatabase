@@ -17,6 +17,7 @@ const statusEl = document.getElementById('gameStatus')
 const fenEl = document.getElementById('gameFEN')
 const movesEl = document.getElementById('movesEl')
 const childrenMovesEl = document.getElementById("childrenMoves")
+const gamesEl = document.getElementById("games")
 
 const moves = []
 let moveIndex = 0;
@@ -27,6 +28,7 @@ const state = {
   statusEl,
   fenEl,
   movesEl,
+  gamesEl,
   moves,
   moveIndex,
   childrenMovesEl,
@@ -34,7 +36,7 @@ const state = {
 
 updateStatus()
 
-function getMoves(fen){
+async function getMoves(fen){
   let moves = state.game.moves({verbose: true})
   for(let i = 0; i < moves.length; i++){
     moves[i].whitePercent = 40;
@@ -45,9 +47,52 @@ function getMoves(fen){
   return moves
 }
 
-function renderChildrenMoves(fen, childrenMovesEl){
+//event string
+//site string
+//date string
+//round string
+//white string
+//black string
+//result string
+
+
+async function renderGames(fen, gamesEl){
+  gamesEl.replaceChildren()
+  let games = await getGames(fen);
+  try{
+    games = await getGames(fen)
+  }
+  catch(e){
+    throw e
+  }
+  console.log(games)
+
+  for(let i = 0; i < games.length; i++){
+    let game = games[i]
+    let gameEl = document.createElement("p")
+
+    gameEl.innerText = 
+      game.white + " vs " +
+      game.black + ": " +
+      game.result
+
+    gameEl.addEventListener("click", (e)=>{
+      alert("going to game!")
+    })
+    gamesEl.append(gameEl)
+  }
+
+}
+
+async function renderChildrenMoves(fen, childrenMovesEl){
   childrenMovesEl.replaceChildren()
-  let moves = getMoves(fen)
+  let moves;
+  try{
+    moves = await getMoves(fen)
+  }
+  catch(e){
+    throw e
+  }
   for(let i = 0; i < moves.length; i++){
     let move = moves[i]
     let moveEl = document.createElement("p")
@@ -59,30 +104,48 @@ function renderChildrenMoves(fen, childrenMovesEl){
       move.whitePercent
 
     moveEl.addEventListener("click", (e)=>{
-      console.log("imclicking")
-      game.move(move)
-      if(state.moves.length === state.moveIndex){
-        state.moves.push(move)
-        state.moveIndex++
-      }else if(state.moves[state.moveIndex].from === move.from && state.moves[state.moveIndex].to === move.to){
-        state.moveIndex++
-      }else{
-        state.moves.splice(state.moveIndex, Infinity, move)
-        state.moveIndex++
-      }
-      board.fen(game.fen(), () => {
-        updateStatus()
-      })
+        game.move(move)
+        if(state.moves.length === state.moveIndex){
+          state.moves.push(move)
+          state.moveIndex++
+        }else if(state.moves[state.moveIndex].from === move.from && state.moves[state.moveIndex].to === move.to){
+          state.moveIndex++
+        }else{
+          state.moves.splice(state.moveIndex, Infinity, move)
+          state.moveIndex++
+        }
+        board.fen(game.fen(), () => {
+          updateStatus()
+        })
       })
 
     childrenMovesEl.append(moveEl)
   }
 }
 
-function getGames(fen){
-  return {
+async function getGames(fen){
+  let data = [];
+  await fetch("src/games.json")
+    .then((res) => res.json())
+    .then((games) => {
+      for(let game of games){
+        let pgnGame = {
+          event: "",
+          site: "",
+          date: "",
+          round: "",
+          white: game.players.white.user.name,
+          black: game.players.black.user.name,
+          result: game.winner
+        }
+        data.push(pgnGame)
+      }
 
-  }
+     })
+    .catch((e) => console.error(e));
+  console.log(data)
+
+  return data
 }
 
 function onDragStart (dragStartEvt) {
@@ -173,6 +236,7 @@ function updateStatus () {
   fenEl.innerHTML = game.fen()
 
   renderChildrenMoves(game.fen(), state.childrenMovesEl)
+  renderGames(game.fen(), state.gamesEl)
   renderMoveArray(state.moves, movesEl)
 }
 
