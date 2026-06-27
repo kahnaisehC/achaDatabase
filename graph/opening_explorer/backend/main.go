@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,10 +14,61 @@ import (
 
 const initialPFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"
 
-func (cfg *config) handlerGetMoves(w http.ResponseWriter, r *http.Request) {
-
+type Game struct {
+	Event  string
+	Site   string
+	Date   string
+	Round  string
+	White  string
+	Black  string
+	Result string
+	Moves  string
 }
+
 func (cfg *config) handlerGetGames(w http.ResponseWriter, r *http.Request) {
+	pfen := r.URL.Query().Get("pfen")
+	if pfen == "" {
+		pfen = initialPFEN
+	}
+	query := `
+	MATCH (p:Position{PFEN: $pfen})-[:Occurred]->(g:Game) return g;`
+	result, err := neo4j.ExecuteQuery(context.Background(), cfg.neo4jDB,
+		query,
+		map[string]any{
+			"pfen": pfen,
+		},
+		neo4j.EagerResultTransformer)
+	if err != nil {
+		panic(err)
+	}
+
+	// Loop through results and do something with them
+
+	games := make([]Game, 0, len(result.Records))
+	for _, record := range result.Records {
+		game := Game{
+			Event:  record.AsMap()["event"].(string),
+			Site:   record.AsMap()["site"].(string),
+			Date:   record.AsMap()["date"].(string),
+			Round:  record.AsMap()["round"].(string),
+			White:  record.AsMap()["white"].(string),
+			Black:  record.AsMap()["black"].(string),
+			Result: record.AsMap()["result"].(string),
+			Moves:  record.AsMap()["moves"].(string),
+		}
+		games = append(games, game)
+	}
+
+	println(games)
+
+	w.Header().Set("Content-Type", "application/json")
+	gameData, err := json.Marshal(games)
+	if err != nil {
+		log.Fatal("couldnt marshal games")
+	}
+	w.Write(gameData)
+}
+func (cfg *config) handlerGetMoves(w http.ResponseWriter, r *http.Request) {
 
 }
 
