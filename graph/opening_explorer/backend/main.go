@@ -39,7 +39,15 @@ func (cfg *config) handlerGetGames(w http.ResponseWriter, r *http.Request) {
 	if pfen == "" {
 		pfen = initialPFEN
 	}
-	query := `MATCH (p:Position{PFEN: $pfen})-[:Occurred]->(g:Game) return g;`
+	query := `MATCH (p:Position{PFEN: $pfen})-[:Occurred]->(g:Game) 
+		return g.Event,
+		g.Date,
+		g.Round,
+		g.White,
+		g.Black,
+		g.Result,
+		g.Site
+	;`
 
 	result, err := neo4j.ExecuteQuery(context.Background(), cfg.neo4jDB,
 		query,
@@ -53,15 +61,16 @@ func (cfg *config) handlerGetGames(w http.ResponseWriter, r *http.Request) {
 
 	games := make([]Game, 0, len(result.Records))
 	for _, record := range result.Records {
+
+		fmt.Println(record.AsMap())
 		game := Game{
-			Event:  record.AsMap()["event"].(string),
-			Site:   record.AsMap()["site"].(string),
-			Date:   record.AsMap()["date"].(string),
-			Round:  record.AsMap()["round"].(string),
-			White:  record.AsMap()["white"].(string),
-			Black:  record.AsMap()["black"].(string),
-			Result: record.AsMap()["result"].(string),
-			Moves:  record.AsMap()["moves"].(string),
+			Event:  record.AsMap()["g.Event"].(string),
+			Site:   record.AsMap()["g.Site"].(string),
+			Date:   record.AsMap()["g.Date"].(string),
+			Round:  record.AsMap()["g.Round"].(string),
+			White:  record.AsMap()["g.White"].(string),
+			Black:  record.AsMap()["g.Black"].(string),
+			Result: record.AsMap()["g.Result"].(string),
 		}
 		games = append(games, game)
 	}
