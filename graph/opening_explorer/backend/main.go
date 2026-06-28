@@ -86,11 +86,12 @@ func (cfg *config) handlerGetGames(w http.ResponseWriter, r *http.Request) {
 }
 
 type Move struct {
+	UCI         string
 	SAN         string
 	NextPFEN    string
-	AmountWhite int
-	AmountBlack int
-	AmountDraw  int
+	AmountWhite int64
+	AmountBlack int64
+	AmountDraw  int64
 }
 
 func (cfg *config) handlerGetMoves(w http.ResponseWriter, r *http.Request) {
@@ -104,8 +105,8 @@ func (cfg *config) handlerGetMoves(w http.ResponseWriter, r *http.Request) {
 	-[m:Move]->
 	(p2:Position) 
 	RETURN
-	m.SAN AS SAN,
-	p2.PFEN AS PFEN, 
+	m.UCI AS UCI,
+	p2.PFEN AS NextPFEN, 
 	COUNT{(p2)-[:Occurred]->(g:Game) WHERE g.Result = "1/2-1/2"} AS AmountDraw, 
 	COUNT{(p2)-[:Occurred]->(g:Game) WHERE g.Result = "0-1"} AS AmountBlack, 
 	COUNT{(p2)-[:Occurred]->(g:Game) WHERE g.Result = "1-0"} AS AmountWhite;`
@@ -124,11 +125,11 @@ func (cfg *config) handlerGetMoves(w http.ResponseWriter, r *http.Request) {
 
 	for _, record := range result.Records {
 		move := Move{
-			SAN:         record.AsMap()["SAN"].(string),
-			NextPFEN:    record.AsMap()["NextFEN"].(string),
-			AmountWhite: record.AsMap()["AmountWhite"].(int),
-			AmountBlack: record.AsMap()["AmountBlack"].(int),
-			AmountDraw:  record.AsMap()["AmountDraw"].(int),
+			UCI:         record.AsMap()["UCI"].(string),
+			NextPFEN:    record.AsMap()["NextPFEN"].(string),
+			AmountWhite: record.AsMap()["AmountWhite"].(int64),
+			AmountBlack: record.AsMap()["AmountBlack"].(int64),
+			AmountDraw:  record.AsMap()["AmountDraw"].(int64),
 		}
 		moves = append(moves, move)
 	}
