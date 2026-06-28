@@ -22,6 +22,19 @@ const gamesEl = document.getElementById("games")
 const moves = []
 let moveIndex = 0;
 
+
+      function getFromUCI(move){
+        return move.slice(0, 2)
+      }
+      function getToUCI(move){
+        return move.slice(2, 4)
+      }
+      function getPromotionUCI(move){
+        if(move.length < 5)return "-"
+        return move[4]
+      }
+
+
 const state = {
   game,
   board,
@@ -37,14 +50,22 @@ const state = {
 updateStatus()
 
 async function getMoves(fen){
-  let moves = state.game.moves({verbose: true})
-  for(let i = 0; i < moves.length; i++){
-    moves[i].whitePercent = 40;
-    moves[i].blackPercent = 40;
-    moves[i].drawPercent = 20;
-    moves[i].amountGames = 100;
-  }
-  return moves
+
+  let data = [];
+
+  let pfen = toPFEN(fen)
+
+    await fetch("http://127.0.0.1:8081/move?" + new URLSearchParams({
+          pfen: pfen
+    }))
+    .then((res) => res.json())
+    .then((moves) => {
+      data = moves 
+    })
+
+    .catch((e) => console.error(e));
+
+  return data
 }
 
 //event string
@@ -65,16 +86,15 @@ async function renderGames(fen, gamesEl){
   catch(e){
     throw e
   }
-  console.log(games)
 
   for(let i = 0; i < games.length; i++){
     let game = games[i]
     let gameEl = document.createElement("p")
 
     gameEl.innerText = 
-      game.white + " vs " +
-      game.black + ": " +
-      game.result
+      game.White + " vs " +
+      game.Black + ": " +
+      game.Result
 
     gameEl.addEventListener("click", (e)=>{
       alert("going to game!")
@@ -93,25 +113,34 @@ async function renderChildrenMoves(fen, childrenMovesEl){
   catch(e){
     throw e
   }
+  console.log(moves)
   for(let i = 0; i < moves.length; i++){
     let move = moves[i]
     let moveEl = document.createElement("p")
     moveEl.innerText = 
-      move.san + " " + 
-      move.amountGames + " " +
-      move.blackPercent + " " + 
-      move.drawPercent + " " +
-      move.whitePercent
+      move.UCI + " " +
+      move.AmountWhite + " " + 
+      move.AmountBlack + " " +
+      move.AmountDraw
 
     moveEl.addEventListener("click", (e)=>{
-        game.move(move)
+        console.log(move.UCI)
+      
+      
+        
+        let mv = game.move({
+          from: getFromUCI(move.UCI),
+          to: getToUCI(move.UCI),
+          promotion: getPromotionUCI(move.UCI)
+        })
+        console.log(mv)
         if(state.moves.length === state.moveIndex){
-          state.moves.push(move)
+          state.moves.push(mv)
           state.moveIndex++
-        }else if(state.moves[state.moveIndex].from === move.from && state.moves[state.moveIndex].to === move.to){
+        }else if(state.moves[state.moveIndex].from === mv.from && state.moves[state.moveIndex].to === mv.to){
           state.moveIndex++
         }else{
-          state.moves.splice(state.moveIndex, Infinity, move)
+          state.moves.splice(state.moveIndex, Infinity, mv)
           state.moveIndex++
         }
         board.fen(game.fen(), () => {
@@ -123,27 +152,26 @@ async function renderChildrenMoves(fen, childrenMovesEl){
   }
 }
 
+const getGamesURI = ""
+
+function toPFEN(fen){
+  return fen.split(" ").slice(0, -2).join(" ")
+}
+
 async function getGames(fen){
-  let data = [];
-  await fetch("src/games.json")
+    let data = [];
+
+  let pfen = toPFEN(fen)
+
+    await fetch("http://127.0.0.1:8081/game?" + new URLSearchParams({
+          pfen: pfen
+    }))
     .then((res) => res.json())
     .then((games) => {
-      for(let game of games){
-        let pgnGame = {
-          event: "",
-          site: "",
-          date: "",
-          round: "",
-          white: game.players.white.user.name,
-          black: game.players.black.user.name,
-          result: game.winner
-        }
-        data.push(pgnGame)
-      }
+      data = games
+    })
 
-     })
     .catch((e) => console.error(e));
-  console.log(data)
 
   return data
 }

@@ -297,6 +297,6 @@ func main() {
 	// handle post game
 	mux.HandleFunc("POST /game", cfg.handlerPostGames)
 
-	log.Println("Listening on :8081")
-	log.Fatal(http.ListenAndServe(":8081", mux))
+	log.Println("Listening on 127.0.0.1:8081")
+	log.Fatal(http.ListenAndServe("127.0.0.1:8081", mux))
 }
