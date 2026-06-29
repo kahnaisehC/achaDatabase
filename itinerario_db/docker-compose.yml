@@ -1,0 +1,108 @@
+# ============================================================
+#  Entorno completo para el itinerario ACHA con Docker.
+#  Levanta TODO con un solo comando:   docker compose up --build
+#
+#  Servicios:
+#    PASO 1 — PHP + MySQL
+#      - php-relacional  → la app en http://localhost:8000
+#      - mysql           → servidor MySQL (puerto interno 3306)
+#      - phpmyadmin      → visor web de MySQL en http://localhost:8082
+#
+#    PASO 2 — PHP + MongoDB
+#      - php             → la app en http://localhost:8080
+#      - mongo           → servidor MongoDB en el puerto 27017
+#      - mongo-express   → visor web de Mongo en http://localhost:8081
+#
+#  Puertos elegidos para NO chocar con XAMPP (Apache 80, MySQL 3306).
+# ============================================================
+services:
+
+  # ----------------------------------------------------------
+  #  PASO 1 — PHP + MySQL
+  # ----------------------------------------------------------
+  php-relacional:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.relacional
+    container_name: acha_php_relacional
+    ports:
+      - "8000:80"
+    volumes:
+      - ./paso1_relacional:/var/www/html
+    environment:
+      MYSQL_HOST:     mysql
+      MYSQL_DATABASE: acha
+      MYSQL_USER:     root
+      MYSQL_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy   # espera que MySQL esté listo
+
+  mysql:
+    image: mysql:8.0
+    container_name: acha_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: acha
+    ports:
+      - "3307:3306"              # 3307 externo para no chocar con XAMPP
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Al iniciar por primera vez, MySQL ejecuta automáticamente los .sql
+      # que estén en esta carpeta. Así el schema se carga solo.
+      - ./paso1_relacional/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: acha_phpmyadmin
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - mysql
+
+  # ----------------------------------------------------------
+  #  PASO 2 — PHP + MongoDB
+  # ----------------------------------------------------------
+  php:
+    build: ./docker
+    container_name: acha_php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./paso2_mongodb:/var/www/html
+    environment:
+      MONGO_URI: "mongodb://mongo:27017"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: acha_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: acha_mongo_express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: "mongodb://mongo:27017"
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      - mongo
+
+volumes:
+  mysql_data:
+  mongo_data:

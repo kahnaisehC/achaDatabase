@@ -1,0 +1,13 @@
+{
+    "name": "acha-firestore-demo",
+    "version": "1.0.0",
+    "description": "Paso 4 del itinerario: jugadores en Cloud Firestore (serverless + tiempo real).",
+    "type": "module",
+    "scripts": {
+        "node-demo": "node firestore_node.js"
+    },
+    "dependencies": {
+        "firebase": "^11.0.0"
+    },
+    "//nota": "Para el demo del navegador (index.html) NO hace falta instalar nada: usa el SDK por CDN."
+}

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACHA · Inscripción Interliga Chaqueña</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+            color: #1f2937;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.1);
+            width: 100%;
+            max-width: 560px;
+            height: fit-content;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #7c3aed;
+            color: #fff;
+            padding: 1.5rem 1.75rem;
+            border-bottom: 4px solid #5b21b6;
+        }
+
+        .card-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .card-header p {
+            font-size: .85rem;
+            margin-top: .4rem;
+            opacity: .85;
+        }
+
+        .card-body {
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+        }
+
+        label {
+            font-size: .9rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        label .req {
+            color: #dc2626;
+            margin-left: 2px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"] {
+            padding: .6rem .75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color .15s, box-shadow .15s;
+            color: #111827;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,.15);
+        }
+
+        .hint {
+            font-size: .78rem;
+            color: #6b7280;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: .75rem;
+            margin-top: .5rem;
+            flex-wrap: wrap;
+        }
+
+        button[type="submit"] {
+            flex: 1;
+            padding: .65rem 1rem;
+            background: #7c3aed;
+            color: #fff;
+            border: 0;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        button[type="submit"]:hover  { background: #6d28d9; }
+        button[type="submit"]:active { background: #5b21b6; }
+        button[type="submit"]:disabled { background: #a78bfa; cursor: not-allowed; }
+
+        button[type="reset"] {
+            padding: .65rem 1rem;
+            background: transparent;
+            color: #7c3aed;
+            border: 1px solid #7c3aed;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        button[type="reset"]:hover { background: #f5f3ff; }
+
+        .toast {
+            display: none;
+            margin-top: .75rem;
+            padding: .65rem .9rem;
+            border-radius: 8px;
+            font-size: .9rem;
+            font-weight: 500;
+        }
+
+        .toast.ok    { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; display: block; }
+        .toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; display: block; }
+
+        /* tabla */
+        .tabla-wrap {
+            margin-top: 2rem;
+        }
+
+        .tabla-wrap h2 {
+            font-size: 1rem;
+            margin-bottom: .75rem;
+            color: #4b5563;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .85rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: .5rem .6rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th { background: #f9fafb; font-weight: 600; color: #374151; }
+        td { color: #1f2937; }
+
+        tr:hover td { background: #faf5ff; }
+    </style>
+</head>
+<body>
+<div>
+    <div class="card">
+        <div class="card-header">
+            <h1>Interliga Chaqueña de Ajedrez<br>Región Metropolitana — 2da Edición</h1>
+            <p>Fontana, Chaco &nbsp;·&nbsp; Inscripción gratuita</p>
+        </div>
+        <div class="card-body">
+            <form id="form-inscripcion" novalidate>
+
+                <div class="field">
+                    <label for="apellido">Apellido <span class="req">*</span></label>
+                    <input type="text" id="apellido" placeholder="Tu apellido" required autocomplete="family-name">
+                </div>
+
+                <div class="field">
+                    <label for="nombre">Nombre <span class="req">*</span></label>
+                    <input type="text" id="nombre" placeholder="Tu nombre" required autocomplete="given-name">
+                </div>
+
+                <div class="field">
+                    <label for="fecha_nacimiento">Fecha de nacimiento <span class="req">*</span></label>
+                    <input type="date" id="fecha_nacimiento" required>
+                    <span class="hint">DD / MM / AAAA</span>
+                </div>
+
+                <div class="field">
+                    <label for="dni">DNI <span class="req">*</span></label>
+                    <input type="text" id="dni" placeholder="Ej: 40123456" required
+                           inputmode="numeric" maxlength="10">
+                </div>
+
+                <div class="field">
+                    <label for="id_fide">ID FIDE</label>
+                    <input type="text" id="id_fide" placeholder="Opcional" inputmode="numeric" maxlength="10">
+                    <span class="hint">Dejalo vacío si no tenés</span>
+                </div>
+
+                <div class="field">
+                    <label for="telefono">Número de teléfono <span class="req">*</span></label>
+                    <input type="tel" id="telefono" placeholder="Ej: 3624 123456" required
+                           autocomplete="tel">
+                </div>
+
+                <div class="btn-row">
+                    <button type="submit" id="btn-enviar">Enviar</button>
+                    <button type="reset">Borrar formulario</button>
+                </div>
+
+                <div class="toast" id="toast"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="tabla-wrap card" style="margin-top:1.5rem; padding:1.25rem;">
+        <h2>Inscriptos <span id="badge-count" style="color:#7c3aed;"></span></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>DNI</th>
+                    <th>ID FIDE</th>
+                    <th>Teléfono</th>
+                    <th>Nacimiento</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-inscriptos">
+                <tr><td colspan="6">Conectando con Firestore…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import {
+        getFirestore, collection, addDoc, onSnapshot,
+        query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyArxoIlnzo9CJznlnNPQ4x0cRUVskX0uWE",
+        authDomain:        "chess-43db0.firebaseapp.com",
+        projectId:         "chess-43db0",
+        storageBucket:     "chess-43db0.firebasestorage.app",
+        messagingSenderId: "694683154000",
+        appId:             "1:694683154000:web:740ea1d2244341d291c355",
+        measurementId:     "G-LDFEG6SC36"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    const form    = document.getElementById("form-inscripcion");
+    const btnEnv  = document.getElementById("btn-enviar");
+    const toast   = document.getElementById("toast");
+
+    function showToast(msg, type) {
+        toast.textContent = msg;
+        toast.className = `toast ${type}`;
+        setTimeout(() => { toast.className = "toast"; }, 4000);
+    }
+
+    form.addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+
+        const apellido = document.getElementById("apellido").value.trim();
+        const nombre   = document.getElementById("nombre").value.trim();
+        const fecha    = document.getElementById("fecha_nacimiento").value;
+        const dni      = document.getElementById("dni").value.trim();
+        const fide     = document.getElementById("id_fide").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+
+        if (!apellido || !nombre || !fecha || !dni || !telefono) {
+            showToast("Completá todos los campos obligatorios.", "error");
+            return;
+        }
+
+        btnEnv.disabled = true;
+        btnEnv.textContent = "Enviando…";
+
+        try {
+            const doc = {
+                apellido,
+                nombre,
+                fecha_nacimiento: fecha,
+                dni,
+                telefono,
+                inscripto_en: serverTimestamp()
+            };
+            if (fide) doc.id_fide = fide;
+
+            await addDoc(collection(db, "inscriptos_interliga"), doc);
+            form.reset();
+            showToast("¡Inscripción enviada con éxito!", "ok");
+        } catch (err) {
+            console.error(err);
+            showToast("Error al enviar. Revisá la consola.", "error");
+        } finally {
+            btnEnv.disabled = false;
+            btnEnv.textContent = "Enviar";
+        }
+    });
+
+    // Escucha en tiempo real — ordena por apellido
+    const q = query(
+        collection(db, "inscriptos_interliga"),
+        orderBy("apellido")
+    );
+
+    onSnapshot(q, (snapshot) => {
+        const tbody = document.getElementById("tabla-inscriptos");
+        const badge = document.getElementById("badge-count");
+
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="6">Todavía no hay inscriptos.</td></tr>';
+            badge.textContent = "";
+            return;
+        }
+
+        badge.textContent = `(${snapshot.size})`;
+        tbody.innerHTML = "";
+        snapshot.forEach((docu) => {
+            const d = docu.data();
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${d.apellido ?? ""}</td>
+                <td>${d.nombre ?? ""}</td>
+                <td>${d.dni ?? ""}</td>
+                <td>${d.id_fide ?? "—"}</td>
+                <td>${d.telefono ?? ""}</td>
+                <td>${d.fecha_nacimiento ?? ""}</td>`;
+            tbody.appendChild(tr);
+        });
+    });
+</script>
+</body>
+</html>

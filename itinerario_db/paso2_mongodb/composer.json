@@ -1,0 +1,8 @@
+{
+    "//": "Dependencia de la librería oficial de MongoDB para PHP.",
+    "//instalar": "Ejecutá:  composer install   (requiere la extensión PECL 'mongodb' instalada en PHP)",
+    "//compatibilidad": "Rango ^1.17 || ^2.0: en PHP 8.0 (XAMPP 8.0.30) Composer instala la 1.x; en PHP 8.1+ instala la 2.x. El código del Paso 2 funciona igual en ambas.",
+    "require": {
+        "mongodb/mongodb": "^1.17 || ^2.0"
+    }
+}

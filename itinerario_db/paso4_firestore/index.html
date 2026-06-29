@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACHA · Jugadores (Cloud Firestore en tiempo real)</title>
+    <style>
+        body   { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #1f2937; }
+        h1     { font-size: 1.4rem; }
+        form   { display: grid; gap: .6rem; background: #fff7ed; padding: 1rem; border-radius: 10px; border: 1px solid #fed7aa; }
+        input  { padding: .5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+        button { padding: .55rem; border: 0; border-radius: 6px; background: #ea580c; color: #fff; font-size: 1rem; cursor: pointer; }
+        table  { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid #e5e7eb; }
+        th     { background: #f1f5f9; }
+        .live  { font-size: .8rem; color: #16a34a; }
+    </style>
+</head>
+<body>
+    <h1>♟ Jugadores de la ACHA — Cloud Firestore</h1>
+    <p>Abrí esta página en <b>dos pestañas</b>: al registrar en una, la tabla de la otra
+       se actualiza sola, <b>sin recargar</b>. Eso es <code>onSnapshot</code>.</p>
+
+    <form id="form-jugador">
+        <input type="text"  id="nombre_apellido" placeholder="Nombre y apellido *" required>
+        <input type="email" id="email"           placeholder="Email *"            required>
+        <input type="text"  id="dni"             placeholder="DNI *"              required>
+        <input type="text"  id="id_fide"         placeholder="ID FIDE (opcional)">
+        <input type="text"  id="ciudad"          placeholder="Ciudad (opcional)">
+        <button type="submit">Registrar jugador</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Nombre y apellido</th><th>Email</th><th>ID FIDE</th><th>Ciudad</th></tr>
+        </thead>
+        <tbody id="tabla-jugadores">
+            <tr><td colspan="5">Conectando con Firestore…</td></tr>
+        </tbody>
+    </table>
+
+    <!-- =========================================================
+         Firestore con el SDK modular cargado por CDN (sin build).
+         Reemplazá firebaseConfig por el de TU proyecto Firebase.
+    ========================================================== -->
+    <script type="module">
+        // 1) Importamos sólo las funciones que usamos (tree-shaking).
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+        import {
+            getFirestore, collection, addDoc, onSnapshot,
+            query, orderBy, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+        // 2) Configuración de tu proyecto (Consola de Firebase > Configuración).
+        const firebaseConfig = {
+            apiKey:            "TU_API_KEY",
+            authDomain:        "acha-ajedrez.firebaseapp.com",
+            projectId:         "acha-ajedrez",
+            storageBucket:     "acha-ajedrez.appspot.com",
+            messagingSenderId: "000000000000",
+            appId:             "1:000000000000:web:xxxxxxxxxxxx"
+        };
+
+        // 3) Inicializamos la app y obtenemos la base Firestore.
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        // 4) INSERCIÓN (CREATE): addDoc agrega un documento a la
+        //    colección "jugadores". Firestore genera el ID solo.
+        const form = document.getElementById("form-jugador");
+        form.addEventListener("submit", async (ev) => {
+            ev.preventDefault();
+            const fide = document.getElementById("id_fide").value.trim();
+            const jugador = {
+                nombre_apellido: document.getElementById("nombre_apellido").value.trim(),
+                email:           document.getElementById("email").value.trim(),
+                dni:             document.getElementById("dni").value.trim(),
+                ciudad:          document.getElementById("ciudad").value.trim() || null,
+                creado_en:       serverTimestamp()   // hora del servidor
+            };
+            // Esquema flexible: el campo id_fide sólo se agrega si existe.
+            if (fide) jugador.id_fide = fide;
+
+            await addDoc(collection(db, "jugadores"), jugador);
+            form.reset();
+        });
+
+        // 5) CONSULTA EN TIEMPO REAL (READ): onSnapshot se dispara
+        //    AHORA y CADA VEZ que cambian los datos en el servidor.
+        const q = query(collection(db, "jugadores"), orderBy("creado_en", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const tbody = document.getElementById("tabla-jugadores");
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="5">Todavía no hay jugadores.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = "";
+            snapshot.forEach((docu) => {
+                const j = docu.data();
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${docu.id}</td>
+                    <td>${j.nombre_apellido ?? ""}</td>
+                    <td>${j.email ?? ""}</td>
+                    <td>${j.id_fide ?? "—"}</td>
+                    <td>${j.ciudad ?? "—"}</td>`;
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+</body>
+</html>

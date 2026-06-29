@@ -1,0 +1,13 @@
+# ============================================================
+#  Imagen PHP 8.2 + Apache con PDO MySQL para el Paso 1.
+#  Mucho más simple que el Dockerfile del Paso 2 porque
+#  pdo_mysql viene incluido en la imagen base de PHP.
+# ============================================================
+FROM php:8.2-apache
+
+# Activamos la extensión PDO + driver MySQL.
+RUN docker-php-ext-install pdo_mysql
+
+WORKDIR /var/www/html
+
+CMD apache2-foreground
