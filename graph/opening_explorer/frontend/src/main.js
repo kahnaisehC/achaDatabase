@@ -16,9 +16,24 @@ const board = Chessboard2('myBoard', boardConfig)
 const statusEl = document.getElementById('gameStatus')
 const fenEl = document.getElementById('gameFEN')
 const movesEl = document.getElementById('movesEl')
+const childrenMovesEl = document.getElementById("childrenMoves")
+const gamesEl = document.getElementById("games")
 
 const moves = []
 let moveIndex = 0;
+
+
+      function getFromUCI(move){
+        return move.slice(0, 2)
+      }
+      function getToUCI(move){
+        return move.slice(2, 4)
+      }
+      function getPromotionUCI(move){
+        if(move.length < 5)return "-"
+        return move[4]
+      }
+
 
 const state = {
   game,
@@ -26,11 +41,140 @@ const state = {
   statusEl,
   fenEl,
   movesEl,
+  gamesEl,
   moves,
   moveIndex,
+  childrenMovesEl,
 }
 
 updateStatus()
+
+async function getMoves(fen){
+
+  let data = [];
+
+  let pfen = toPFEN(fen)
+
+    await fetch("http://127.0.0.1:8081/move?" + new URLSearchParams({
+          pfen: pfen
+    }))
+    .then((res) => res.json())
+    .then((moves) => {
+      data = moves 
+    })
+
+    .catch((e) => console.error(e));
+
+  return data
+}
+
+//event string
+//site string
+//date string
+//round string
+//white string
+//black string
+//result string
+
+
+async function renderGames(fen, gamesEl){
+  gamesEl.replaceChildren()
+  let games = await getGames(fen);
+  try{
+    games = await getGames(fen)
+  }
+  catch(e){
+    throw e
+  }
+
+  for(let i = 0; i < games.length; i++){
+    let game = games[i]
+    let gameEl = document.createElement("p")
+
+    gameEl.innerText = 
+      game.White + " vs " +
+      game.Black + ": " +
+      game.Result
+
+    gameEl.addEventListener("click", (e)=>{
+      alert("going to game!")
+    })
+    gamesEl.append(gameEl)
+  }
+
+}
+
+async function renderChildrenMoves(fen, childrenMovesEl){
+  childrenMovesEl.replaceChildren()
+  let moves;
+  try{
+    moves = await getMoves(fen)
+  }
+  catch(e){
+    throw e
+  }
+  console.log(moves)
+  for(let i = 0; i < moves.length; i++){
+    let move = moves[i]
+    let moveEl = document.createElement("p")
+    moveEl.innerText = 
+      move.UCI + " " +
+      move.AmountWhite + " " + 
+      move.AmountBlack + " " +
+      move.AmountDraw
+
+    moveEl.addEventListener("click", (e)=>{
+        console.log(move.UCI)
+      
+      
+        
+        let mv = game.move({
+          from: getFromUCI(move.UCI),
+          to: getToUCI(move.UCI),
+          promotion: getPromotionUCI(move.UCI)
+        })
+        console.log(mv)
+        if(state.moves.length === state.moveIndex){
+          state.moves.push(mv)
+          state.moveIndex++
+        }else if(state.moves[state.moveIndex].from === mv.from && state.moves[state.moveIndex].to === mv.to){
+          state.moveIndex++
+        }else{
+          state.moves.splice(state.moveIndex, Infinity, mv)
+          state.moveIndex++
+        }
+        board.fen(game.fen(), () => {
+          updateStatus()
+        })
+      })
+
+    childrenMovesEl.append(moveEl)
+  }
+}
+
+const getGamesURI = ""
+
+function toPFEN(fen){
+  return fen.split(" ").slice(0, -2).join(" ")
+}
+
+async function getGames(fen){
+    let data = [];
+
+  let pfen = toPFEN(fen)
+
+    await fetch("http://127.0.0.1:8081/game?" + new URLSearchParams({
+          pfen: pfen
+    }))
+    .then((res) => res.json())
+    .then((games) => {
+      data = games
+    })
+
+    .catch((e) => console.error(e));
+
+  return data
+}
 
 function onDragStart (dragStartEvt) {
   // do not pick up pieces if the game is over
@@ -69,7 +213,6 @@ function onDrop (dropEvt) {
   if (move) {
     // update the board position with the new game position, then update status DOM elements
     board.fen(game.fen(), () => {
-      move.fen = game.fen()
       updateStatus()
     })
     if(moves.length === state.moveIndex){
@@ -120,6 +263,8 @@ function updateStatus () {
   statusEl.innerHTML = statusHTML
   fenEl.innerHTML = game.fen()
 
+  renderChildrenMoves(game.fen(), state.childrenMovesEl)
+  renderGames(game.fen(), state.gamesEl)
   renderMoveArray(state.moves, movesEl)
 }
 
@@ -132,7 +277,7 @@ function renderMoveArray(moves, movesEl){
       moveEl.innerText = "" + (i/2+1) + ". "
     }
     moveEl.innerText += move.san + " "
-    moveEl.setAttribute("data-fen", move.fen)
+    moveEl.setAttribute("data-fen", move.after)
     moveEl.setAttribute("data-index", i)
     moveEl.setAttribute("active", false)
     if(i === state.moveIndex-1){
