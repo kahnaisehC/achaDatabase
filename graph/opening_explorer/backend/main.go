@@ -87,7 +87,6 @@ func (cfg *config) handlerGetGames(w http.ResponseWriter, r *http.Request) {
 
 type Move struct {
 	UCI         string
-	SAN         string
 	NextPFEN    string
 	AmountWhite int64
 	AmountBlack int64
@@ -188,12 +187,13 @@ func (cfg *config) handlerPostGames(w http.ResponseWriter, r *http.Request) {
 						PFEN: $pfen
 					})
 					MERGE(g:Game) FILTER elementId(g) = $id
-					MERGE (p)-[:Occurred]->(g)
+					MERGE (p)-[:Occurred{play:$moveCounter}]->(g)
 					RETURN * 
 					`,
 					map[string]any{
-						"pfen": prevPFEN,
-						"id":   id,
+						"pfen":        prevPFEN,
+						"id":          id,
+						"moveCounter": 0,
 					})
 				if err != nil {
 					log.Fatal(err)
@@ -201,7 +201,7 @@ func (cfg *config) handlerPostGames(w http.ResponseWriter, r *http.Request) {
 
 				postPFEN := ""
 				gameState := pgn.NewStartingPosition()
-				for _, move := range game.Moves {
+				for i, move := range game.Moves {
 					pgn.MakeMove(gameState, move)
 					fmt.Println(gameState.ToFEN())
 					fmt.Println(move.String())
@@ -218,11 +218,12 @@ func (cfg *config) handlerPostGames(w http.ResponseWriter, r *http.Request) {
 						PFEN: $pfen
 					})
 					MERGE(g:Game) FILTER elementId(g) = $id
-					MERGE (p)-[:Occurred]->(g)
+					MERGE (p)-[:Occurred{play:$moveCounter}]->(g)
 					`,
 						map[string]any{
-							"pfen": postPFEN,
-							"id":   id,
+							"pfen":        postPFEN,
+							"id":          id,
+							"moveCounter": i + 1,
 						})
 					if err != nil {
 						log.Fatal(err)
@@ -299,4 +300,5 @@ func main() {
 
 	log.Println("Listening on 127.0.0.1:8081")
 	log.Fatal(http.ListenAndServe("127.0.0.1:8081", mux))
+
 }
