@@ -1,0 +1,70 @@
+[Event "rated blitz game"]
+[Site "https://lichess.org/Dhktv7da"]
+[Date "2026.06.27"]
+[Round "-"]
+[White "sikada3301"]
+[Black "DjangoHX"]
+[Result "0-1"]
+[GameId "Dhktv7da"]
+[UTCDate "2026.06.27"]
+[UTCTime "20:06:24"]
+[WhiteElo "2215"]
+[BlackElo "2119"]
+[WhiteRatingDiff "-8"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C70"]
+[Opening "Ruy Lopez: Morphy Defense, Caro Variation"]
+[Termination "Normal"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 b5 5. Bb3 Nf6 6. d3 Bb7 7. O-O Be7 8. a4 b4 9. a5 h6 10. Nbd2 O-O 11. Nc4 d6 12. Ne3 Nd7 13. Nd5 Nc5 14. Bc4 Kh8 15. Be3 f5 16. exf5 Rxf5 17. Qd2 Nd7 18. Bxh6 Nf6 19. Nxe7 Qxe7 20. Nh4 gxh6 21. Qxh6+ Qh7 22. Qxh7+ Kxh7 23. Nxf5 d5 24. Bb3 Kg6 25. Ne3 Rh8 26. h3 Nd4 27. Rae1 Nxb3 28. cxb3 d4 29. Ng4 Nxg4 30. hxg4 Kf6 31. Rc1 Rh7 32. f3 Bd5 33. Rc5 Bxb3 34. Re1 Re7 35. Rc6+ Kg5 36. Rxa6 Bc2 37. Rc6 Bxd3 38. a6 Bb5 39. a7 Bxc6 40. Ra1 Ba8 41. Ra6 d3 42. b3 d2 43. Ra1 Rd7 44. Rd1 c5 45. Kf2 Kf4 46. Rh1 d1=Q 47. Rh5 Rd2# 0-1
+
+
+[Event "rated blitz game"]
+[Site "https://lichess.org/EhhXjb19"]
+[Date "2026.06.27"]
+[Round "-"]
+[White "sikada3301"]
+[Black "smilealive"]
+[Result "1-0"]
+[GameId "EhhXjb19"]
+[UTCDate "2026.06.27"]
+[UTCTime "20:02:57"]
+[WhiteElo "2210"]
+[BlackElo "2161"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B00"]
+[Opening "Owen Defense"]
+[Termination "Normal"]
+
+1. e4 b6 2. d4 Bb7 3. Nc3 e6 4. d5 Bb4 5. Qg4 Qf6 6. Bd2 Nh6 7. Qg3 O-O 8. Bd3 e5 9. Nf3 d6 10. Bg5 Qg6 11. Nh4 Qh5 12. Bxh6 Qxh6 13. Nf5 Qf6 14. O-O-O Bxc3 15. bxc3 Nd7 16. h4 Kh8 17. Qh3 Nc5 18. g4 Qd8 19. h5 Qe8 20. Qh4 Qa4 21. Qg5 Rg8 22. h6 Qa3+ 23. Kd2 g6 24. Qf6+ 1-0
+
+
+[Event "rated blitz game"]
+[Site "https://lichess.org/WBZUBonn"]
+[Date "2026.06.27"]
+[Round "-"]
+[White "rayden1986"]
+[Black "sikada3301"]
+[Result "1-0"]
+[GameId "WBZUBonn"]
+[UTCDate "2026.06.27"]
+[UTCTime "05:35:55"]
+[WhiteElo "2072"]
+[BlackElo "2218"]
+[WhiteRatingDiff "+8"]
+[BlackRatingDiff "-8"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A04"]
+[Opening "Zukertort Opening: Pirc Invitation"]
+[Termination "Normal"]
+
+1. Nf3 d6 2. c4 e6 3. d4 Nf6 4. Nc3 Be7 5. g3 O-O 6. Bg2 c5 7. O-O Nc6 8. b3 Qc7 9. e4 a6 10. Bb2 Rd8 11. d5 Nd4 12. Nxd4 cxd4 13. Ne2 e5 14. f4 Ng4 15. Qd2 Ne3 16. Rfe1 Nxg2 17. Kxg2 Qd7 18. fxe5 Qh3+ 19. Kg1 dxe5 20. Nc1 Bg4 21. Nd3 h6 22. Nxe5 Bg5 23. Qg2 Be3+ 24. Kh1 Qh5 25. Nxg4 Qxg4 26. Rad1 Rf8 27. Bxd4 Bxd4 28. Rxd4 Rfe8 29. h3 Qg6 30. e5 a5 31. a4 Rac8 32. Rde4 Rcd8 33. e6 fxe6 34. Rxe6 Rxe6 35. Rxe6 Qd3 36. Qe2 Qxg3 37. Re8+ Kh7 38. Qe4+ g6 39. Qe7# 1-0
+
+
+

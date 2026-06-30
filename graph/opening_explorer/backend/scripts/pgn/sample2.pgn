@@ -1,0 +1,24 @@
+[Event "rated blitz game"]
+[Site "https://lichess.org/ZarWXnmH"]
+[Date "2026.06.27"]
+[Round "-"]
+[White "davidraamirez9"]
+[Black "sikada3301"]
+[Result "1-0"]
+[GameId "ZarWXnmH"]
+[UTCDate "2026.06.27"]
+[UTCTime "21:06:41"]
+[WhiteElo "2191"]
+[BlackElo "2207"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D35"]
+[Opening "Queen's Gambit Declined: Exchange Variation"]
+[Termination "Normal"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 Be7 5. dxe6 Bxe6 6. e4 O-O 7. Nf3 Bb4 8. Bd3 Re8 9. O-O Bg4 10. e5 Nc6 11. exf6 Nxd4 12. Be2 Nxe2+ 13. Nxe2 Qxd1 14. Rxd1 Rxe2 15. fxg7 Rae8 16. Be3 Rxb2 17. Rd4 Bc3 18. Rxg4 1-0
+
+
+
